@@ -34,20 +34,11 @@
 // Execute `rustlings hint tests7` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
-use std::time::{SystemTime, UNIX_EPOCH};
 
 
 fn main() {
-    // 获取当前时间戳（Unix 时间，以秒为单位）
-    let timestamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_secs();
-    
-    // 使用正确的 cargo 命令格式设置环境变量
-    println!("cargo:rustc-env=TEST_FOO={}", timestamp);
+   
 }
 
 

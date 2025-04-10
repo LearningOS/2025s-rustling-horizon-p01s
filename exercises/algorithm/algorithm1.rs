@@ -2,7 +2,7 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -69,15 +69,78 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+	pub fn merge(mut list_a:LinkedList<T>,mut list_b:LinkedList<T>) -> Self
+	where
+    T: Ord,
+{
+    let mut result = LinkedList::new();
+    
+   
+    let mut current_a = list_a.start;
+    let mut current_b = list_b.start;
+    
+    
+    list_a.start = None;
+    list_a.end = None;
+    list_a.length = 0;
+    
+    list_b.start = None;
+    list_b.end = None;
+    list_b.length = 0;
+    
+    
+    while current_a.is_some() && current_b.is_some() {
+        let node_a = unsafe { current_a.unwrap().as_ptr() };
+        let node_b = unsafe { current_b.unwrap().as_ptr() };
+        
+        
+        if unsafe { (*node_a).val <= (*node_b).val } {
+           
+            let next = unsafe { (*node_a).next };
+            current_a = next;
+            
+            
+            result.add(unsafe { std::ptr::read(&(*node_a).val) });
+            
+            
+            unsafe { Box::from_raw(node_a) };
+        } else {
+            
+            let next = unsafe { (*node_b).next };
+            current_b = next;
+            
+            
+            result.add(unsafe { std::ptr::read(&(*node_b).val) });
+            
+            
+            unsafe { Box::from_raw(node_b) };
         }
-	}
+    }
+    
+    
+    while let Some(ptr) = current_a {
+        let node = unsafe { ptr.as_ptr() };
+        let next = unsafe { (*node).next };
+        
+        result.add(unsafe { std::ptr::read(&(*node).val) });
+        
+        current_a = next;
+        unsafe { Box::from_raw(node) };
+    }
+    
+    
+    while let Some(ptr) = current_b {
+        let node = unsafe { ptr.as_ptr() };
+        let next = unsafe { (*node).next };
+        
+        result.add(unsafe { std::ptr::read(&(*node).val) });
+        
+        current_b = next;
+        unsafe { Box::from_raw(node) };
+    }
+    
+    result
+}
 }
 
 impl<T> Display for LinkedList<T>

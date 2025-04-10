@@ -3,7 +3,6 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -51,12 +50,33 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        match &mut self.root {
+            None=>{
+                self.root =Some(Box::new(TreeNode::new(value)));
+            }
+            Some(node)=>{
+                node.insert(value);
+            }
+            
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        fn search_helper<T: Ord>(node: &Option<Box<TreeNode<T>>>, value: &T) -> bool {
+            match node {
+                None => false,
+                Some(node) => {
+                    match value.cmp(&node.value) {
+                        Ordering::Equal => true,
+                        Ordering::Less => search_helper(&node.left, value),
+                        Ordering::Greater => search_helper(&node.right, value),
+                    }
+                }
+            }
+        }
+        
+        search_helper(&self.root, &value)
     }
 }
 
@@ -66,7 +86,37 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        match value.cmp(&self.value) {
+            Ordering::Equal => {
+                
+            }
+            Ordering::Less => {
+                
+                match &mut self.left {
+                    None => {
+                        
+                        self.left = Some(Box::new(TreeNode::new(value)));
+                    }
+                    Some(node) => {
+                        
+                        node.insert(value);
+                    }
+                }
+            }
+            Ordering::Greater => {
+                
+                match &mut self.right {
+                    None => {
+                       
+                        self.right = Some(Box::new(TreeNode::new(value)));
+                    }
+                    Some(node) => {
+                        
+                        node.insert(value);
+                    }
+                }
+            }
+        }
     }
 }
 
